@@ -1,1 +1,2 @@
-# RISC_32I_Processor_Verilog
+# RISC-V
+RISC V Processor Design in Verilog
