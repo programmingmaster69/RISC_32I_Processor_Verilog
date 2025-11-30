@@ -6,12 +6,12 @@ A 32-bit RISC processor (RV32I-style) implemented in Verilog — with a pipeline
 
 ## Features 
 
-- 32-bit RISC core (based on a classic 32-bit instruction set architecture, similar to RISC‑V RV32I) :contentReference[oaicite:2]{index=2}  
-- Modular RTL: separated into sub-modules for ALU, control unit, instruction and data memory, register file, pipeline registers (IF/ID, ID/EX, EX/MEM, MEM/WB), forwarding unit, etc. (see file list) :contentReference[oaicite:3]{index=3}  
+- 32-bit RISC core (based on a classic 32-bit instruction set architecture, similar to RISC‑V RV32I) 
+- Modular RTL: separated into sub-modules for ALU, control unit, instruction and data memory, register file, pipeline registers (IF/ID, ID/EX, EX/MEM, MEM/WB), forwarding unit, etc.
 - Support for pipelined execution — enabling better instruction throughput than simple single-cycle designs.  
-- Instruction memory and data memory modules. :contentReference[oaicite:4]{index=4}  
-- Register file, ALU, control logic, multiplexers, and pipeline control for proper instruction flow. :contentReference[oaicite:5]{index=5}  
-- Testbench (`tb.v`) to simulate and verify correct behavior of the processor. :contentReference[oaicite:6]{index=6}  
+- Instruction memory and data memory modules. 
+- Register file, ALU, control logic, multiplexers, and pipeline control for proper instruction flow. 
+- Testbench (`tb.v`) to simulate and verify correct behavior of the processor. 
 
 ---
 
@@ -38,7 +38,7 @@ A 32-bit RISC processor (RV32I-style) implemented in Verilog — with a pipeline
 ### Prerequisites
 
 - A Verilog simulator (e.g. Icarus Verilog for open-source, or commercial tools like ModelSim / QuestaSim / VCS / Riviera‑PRO)  
-- (Optionally) waveform viewer such as GTKWave. :contentReference[oaicite:13]{index=13}  
+- (Optionally) waveform viewer such as GTKWave.  
 
 ### Clone & Simulate
 
