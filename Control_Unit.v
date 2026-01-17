@@ -1,6 +1,7 @@
 module Control_Unit(
   input wire [6:0] Opcode,
-  output reg Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite, [1:0] ALUOp 
+  output reg Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite, 
+  output reg[1:0] ALUOp 
 );
   always @(Opcode)
   begin
