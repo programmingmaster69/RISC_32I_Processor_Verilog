@@ -10,7 +10,8 @@ module ALU_64_bit(
   mux m2 (.in1(b), .in2(bbar), .sel(ALUOp[2]), .out(mux2out));
   assign andOut = mux1out & mux2out;
   assign orOut = mux1out | mux2out;
-  assign sumOut = mux1out + mux2out;
+ // For Subtraction: add 1 to complete the 2's complement
+  assign sumOut = mux1out + mux2out + ALUOp[2];
   mux2 res (.in1(andOut), .in2(orOut), .in3(sumOut), .sel(ALUOp[1:0]), .out(Result));
   assign zero = Result == 64'b0;
 endmodule

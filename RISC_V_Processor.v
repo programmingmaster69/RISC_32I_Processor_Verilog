@@ -4,12 +4,15 @@ module RISC_V_Processor(
   //Wire declarations
   wire [63:0] PC_In, PC_Out, NextPC_In, BranchPC_In, imm_data, ReadData1, ReadData2, writeData, ReadData3, ALUResult, MemRead_Data, updatedData1, updatedData2; 
   wire [31:0] Instruction;
+  //Decoded Bits
   wire [6:0] opcode, funct7;
   wire [4:0] rd, rs1, rs2;
-  wire [3:0] Operation;
   wire [2:0] funct3;
+  //Operation mode of ALU
+  wire [3:0] Operation;
   wire [1:0] ALUOp, ForwardA, ForwardB;
   wire Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite, zero;
+  // Branch Enabled if shouldBranch is 1.
   wand shouldBranch;
 
   //IF/ID Output wire declarations
