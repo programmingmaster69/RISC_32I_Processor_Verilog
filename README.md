@@ -1,12 +1,12 @@
-# RISC_32I_Processor_Verilog
+# RISC_64I_Processor_Verilog
 
-A 32-bit RISC processor (RV32I-style) implemented in Verilog — with a pipelined architecture, modular RTL, instruction & data memory, register file, control units, forwarding logic, and a testbench for functional verification.  
+A 64-bit RISC processor (RV64I-style) implemented in Verilog — with a pipelined architecture, modular RTL, instruction & data memory, register file, control units, forwarding logic, and a testbench for functional verification.  
 
 ---
 
 ## Features 
 
-- 32-bit RISC core (based on a classic 32-bit instruction set architecture, similar to RISC‑V RV32I) 
+- 64-bit RISC core (based on a classic 32-bit instruction set architecture, similar to RISC‑V RV64I) 
 - Modular RTL: separated into sub-modules for ALU, control unit, instruction and data memory, register file, pipeline registers (IF/ID, ID/EX, EX/MEM, MEM/WB), forwarding unit, etc.
 - Support for pipelined execution — enabling better instruction throughput than simple single-cycle designs.  
 - Instruction memory and data memory modules. 
