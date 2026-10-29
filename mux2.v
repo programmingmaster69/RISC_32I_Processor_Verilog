@@ -1,6 +1,9 @@
 module mux2(
-  input wire [63:0] in1, wire [63:0] in2, wire [63:0]  in3, wire [1:0] sel,
-  output wire [63:0] out
+    input wire [63:0] in1,
+    input wire [63:0] in2,
+    input wire [63:0] in3,
+    input wire [1:0] sel,
+    output wire [63:0] out
 );
   wire [63:0] tempResult;
   mux m1 (.in1(in1), .in2(in2), .sel(sel[0]), .out(tempResult));

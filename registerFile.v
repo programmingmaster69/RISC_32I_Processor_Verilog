@@ -1,6 +1,14 @@
 module registerFile(
-  input wire [4:0] rs1, [4:0] rs2, [4:0] rd, [63:0] writeData, wire regWrite, clk, reset,
-  output wire [63:0] ReadData1, wire [63:0] ReadData2 
+    input wire [4:0]  rs1,
+    input wire [4:0]  rs2,
+    input wire [4:0]  rd,
+    input wire [63:0] writeData,
+    input wire        regWrite,
+    input wire        clk,
+    input wire        reset,
+
+    output wire [63:0] ReadData1,
+    output wire [63:0] ReadData2
 );
   reg [63:0] registerArr [31:0];
   always @(posedge reset or posedge clk)
@@ -42,12 +50,12 @@ module registerFile(
       end
     else
     begin
-      if(regWrite)
+      if(regWrite && rd != 5'b0)
       begin
         registerArr[rd] <= writeData;
       end
     end
   end
-  assign ReadData1 = registerArr[rs1];
-  assign ReadData2 = registerArr[rs2];
+  assign ReadData1 = (rs1 == 5'b0) ? 64'b0 : registerArr[rs1];
+  assign ReadData2 = (rs2 == 5'b0) ? 64'b0 : registerArr[rs2];
 endmodule 

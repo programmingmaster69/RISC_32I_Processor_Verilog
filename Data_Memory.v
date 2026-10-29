@@ -1,6 +1,12 @@
 module Data_Memory(
-  input wire [63:0] Mem_Addr, wire [63:0] Write_Data, wire clk, MemWrite, MemRead, wire [1:0] wordSize,
-  output reg [63:0] Read_Data 
+    input wire [63:0] Mem_Addr,
+    input wire [63:0] Write_Data,
+    input wire clk,
+    input wire MemWrite,
+    input wire MemRead,
+    input wire [1:0] wordSize,
+
+    output reg [63:0] Read_Data
 );
   reg [7:0] dataMem [63:0];
   initial
@@ -111,8 +117,9 @@ module Data_Memory(
     end
   end
 
-  always @(Mem_Addr or MemRead or wordSize)
+  always @*
   begin
+    Read_Data = 64'b0;
     if(MemRead)
     begin
       if(wordSize[0])

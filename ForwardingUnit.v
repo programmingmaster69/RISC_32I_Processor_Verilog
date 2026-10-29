@@ -1,6 +1,13 @@
 module ForwardingUnit(
-  input wire [4:0] rdMem, wire regWriteMem, wire [4:0] rdWb, wire regWriteWb, wire [4:0] rs1, wire [4:0] rs2,
-  output reg [1:0] ForwardA, reg [1:0] ForwardB
+    input wire [4:0] rdMem,
+    input wire regWriteMem,
+    input wire [4:0] rdWb,
+    input wire regWriteWb,
+    input wire [4:0] rs1,
+    input wire [4:0] rs2,
+
+    output reg [1:0] ForwardA,
+    output reg [1:0] ForwardB
 );
   always @(rdMem or rdWb or regWriteMem or regWriteWb or rs1 or rs2)
   begin

@@ -1,11 +1,11 @@
 module parser(
-  input wire [31:0] ins,
-  output wire [6:0] opcode,
-  wire [4:0] rd,
-  wire [2:0] funct3,
-  wire [4:0] rs1,
-  wire [4:0] rs2,
-  wire [6:0] funct7 
+    input wire [31:0] ins,
+    output wire [6:0] opcode,
+    output wire [4:0] rd,
+    output wire [2:0] funct3,
+    output wire [4:0] rs1,
+    output wire [4:0] rs2,
+    output wire [6:0] funct7
 );
   assign opcode = ins[6:0];
   assign rd = ins[11:7];

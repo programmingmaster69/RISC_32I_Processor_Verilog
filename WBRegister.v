@@ -1,14 +1,17 @@
 module WBRegister(
-  input wire [63:0] aluResult_in,
-             [63:0] memData_in,
-             [4:0] rd_in,
-             wire MemtoReg_in, RegWrite_in,
-             clk, reset,
-  output reg [63:0] aluResult_out,
-         reg [63:0] memData_out,
-         reg [4:0] rd_out,
-         reg MemtoReg_out, reg RegWrite_out
+    input wire [63:0] aluResult_in,
+    input wire [63:0] memData_in,
+    input wire [4:0]  rd_in,
+    input wire        MemtoReg_in,
+    input wire        RegWrite_in,
+    input wire        clk,
+    input wire        reset,
 
+    output reg [63:0] aluResult_out,
+    output reg [63:0] memData_out,
+    output reg [4:0]  rd_out,
+    output reg        MemtoReg_out,
+    output reg        RegWrite_out
 );
   always @(posedge reset or posedge clk)
   begin

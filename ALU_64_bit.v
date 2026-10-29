@@ -1,6 +1,9 @@
 module ALU_64_bit(
-  input wire [63:0] a, wire [63:0] b, wire [3:0] ALUOp,
-  output wire [63:0] Result, wire zero
+    input wire [63:0] a,
+    input wire [63:0] b,
+    input wire [3:0] ALUOp,
+    output wire [63:0] Result,
+    output wire zero
 );
   wire [63:0] abar, bbar, mux1out, mux2out;
   wire [63:0] andOut, orOut, sumOut;

@@ -13,7 +13,7 @@ module RISC_V_Processor(
   wire [1:0] ALUOp, ForwardA, ForwardB;
   wire Branch, MemRead, MemtoReg, MemWrite, ALUSrc, RegWrite, zero;
   // Branch Enabled if shouldBranch is 1.
-  wand shouldBranch;
+  wire shouldBranch, loadUseHazard, stall;
 
   //IF/ID Output wire declarations
   wire [63:0] pcID;
@@ -37,13 +37,14 @@ module RISC_V_Processor(
   wire MemtoRegWB, RegWriteWB;
 
   //Instruction Fetch Stage
-  Program_Counter pc(.clk(clk), .reset(reset), .PC_In(PC_In), .PC_Out(PC_Out));
+  Program_Counter pc(.clk(clk), .reset(reset), .enable(!stall), .PC_In(PC_In), .PC_Out(PC_Out));
   Adder adder(.a(PC_Out), .b(64'd4), .out(NextPC_In));
   Instruction_Memory insMem(.Inst_Address(PC_Out), .Instruction(Instruction));
   mux newPCMux(.in1(NextPC_In), .in2(pcMEM), .out(PC_In), .sel(shouldBranch));
 
   //IFRegister
   IDRegister idReg(.clk(clk), .reset(reset),
+                   .enable(!stall), .flush(shouldBranch),
                    .PC_in(PC_Out), .ins_in(Instruction),
                    .PC_out(pcID), .ins_out(insID));
   //IDRegister
@@ -56,8 +57,9 @@ module RISC_V_Processor(
 
   //IDRegister
   EXRegister exReg(.clk(clk), .reset(reset), .PC_in(pcID),
+                   .flush(stall || shouldBranch),
                    .data1_in(ReadData1), .data2_in(ReadData2), .immData_in(imm_data), .rs1_in(rs1), .rs2_in(rs2),
-                   .rd_in(rd), .Funct_in({Instruction[30],Instruction[14:12]}),
+                   .rd_in(rd), .Funct_in({insID[30],insID[14:12]}),
                    .Branch_in(Branch), .MemRead_in(MemRead), .MemtoReg_in(MemtoReg), .MemWrite_in(MemWrite), 
                    .ALUSrc_in(ALUSrc), .RegWrite_in(RegWrite), .ALUOp_in(ALUOp), 
                    //Output parameters
@@ -69,7 +71,7 @@ module RISC_V_Processor(
 
   //Instruction Execution Stage
   ALU_Control aluCt(.ALUOp(ALUOpEX), .Funct(functEX), .Operation(Operation));
-  Adder adder1(.a(pcEX), .b(immDataEX << 1), .out(BranchPC_In));
+  Adder adder1(.a(pcEX), .b(immDataEX), .out(BranchPC_In));
   mux2 data1ForwardingMux (.in1(data1EX), .in2(writeData), .in3(aluResultMEM), .sel(ForwardA), .out(updatedData1));
   mux2 data2ForwardingMux (.in1(data2EX), .in2(writeData), .in3(aluResultMEM), .sel(ForwardB), .out(updatedData2));
   ForwardingUnit fwd(.rdMem(rdMEM), .regWriteMem(RegWriteMEM), .rdWb(rdWB), .regWriteWb(RegWriteWB), .rs1(rs1EX), .rs2(rs2EX), 
@@ -78,7 +80,7 @@ module RISC_V_Processor(
   ALU_64_bit alu(.a(updatedData1), .b(ReadData3), .ALUOp(Operation), .Result(ALUResult), .zero(zero));
 
   //EXRegister
-  MEMRegister memReg(.clk(clk), .reset(reset), .PC_in(BranchPC_In),
+  MEMRegister memReg(.clk(clk), .reset(reset), .flush(shouldBranch), .PC_in(BranchPC_In),
                    .aluResult_in(ALUResult), .data2_in(updatedData2),
                    .rd_in(rdEX), .Branch_in(BranchEX), .MemRead_in(MemReadEX), .MemtoReg_in(MemtoRegEX), 
                    .MemWrite_in(MemWriteEX), .RegWrite_in(RegWriteEX), .zero_in(zero),
@@ -90,9 +92,12 @@ module RISC_V_Processor(
 
 
   //Memory Stage
-  assign shouldBranch = BranchMEM;
-  assign shouldBranch = zeroMEM;
-  Data_Memory uut(.Mem_Addr(aluResultMEM), .Write_Data(updatedData2), .clk(clk), .MemWrite(MemWriteMEM), .MemRead(MemReadMEM), .wordSize(2'b11), .Read_Data(MemRead_Data));
+  assign shouldBranch = BranchMEM & zeroMEM;
+  assign loadUseHazard = MemReadEX && (rdEX != 5'b0) &&
+                         (((opcode == 7'b0110011 || opcode == 7'b0000011 || opcode == 7'b0100011 || opcode == 7'b1100011) && (rdEX == rs1)) ||
+                          ((opcode == 7'b0110011 || opcode == 7'b0100011 || opcode == 7'b1100011) && (rdEX == rs2)));
+  assign stall = loadUseHazard && !shouldBranch;
+  Data_Memory uut(.Mem_Addr(aluResultMEM), .Write_Data(data2MEM), .clk(clk), .MemWrite(MemWriteMEM), .MemRead(MemReadMEM), .wordSize(2'b11), .Read_Data(MemRead_Data));
   
   //MEMRegister
   WBRegister wbReg(.clk(clk), .reset(reset),
